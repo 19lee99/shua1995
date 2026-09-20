@@ -6,6 +6,10 @@
 <title>如果那天你上了飛機 · 互動問答遊戲</title>
 <meta name="description" content="五個選擇，一段練習生到出道的旅程。有夢想沒夢想，你們都是完整的人。">
 <meta name="theme-color" content="#0a0d2e">
+<!-- 字體：Huninn 粉圓（繁體圓體，Google Fonts，免費可商用） -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Huninn&display=swap">
 <style>
 :root{
   /* ───────── 外觀設定：改這一區就能換整體配色 ───────── */
@@ -19,13 +23,14 @@
   --gold-ink:#3b2a00;      /* 強調色上的文字 */
   --rail:rgba(255,255,255,.38);
   --fade:420ms;            /* 淡入淡出時間 */
-  --font:"PingFang TC","Noto Sans TC","Microsoft JhengHei","Heiti TC",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font:"Huninn","jf-openhuninn","PingFang TC","Noto Sans TC","Microsoft JhengHei","Heiti TC",system-ui,-apple-system,"Segoe UI",sans-serif;  /* 想換字體改這行 */
 }
 
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0;font-weight:400}
 html,body{height:100%}
 body{
   font-family:var(--font);
+  font-synthesis:none;   /* 不讓瀏覽器自動加粗 */
   background:#0a0d2e;
   display:grid;place-items:center;
   min-height:100vh;min-height:100dvh;
@@ -67,7 +72,7 @@ body{
 }
 .trip.show{opacity:1}
 .trip-label{
-  font-size:4.2cqw;font-weight:800;margin-bottom:1.4cqw;
+  font-size:3.8cqw;margin-bottom:1.4cqw;
   font-variant-numeric:tabular-nums;
   text-shadow:0 .3cqw 1cqw rgba(0,0,0,.4);
 }
@@ -126,11 +131,11 @@ body{
 }
 .emblem svg{width:13cqw;height:13cqw;fill:currentColor;transform:rotate(45deg)}
 .title{
-  font-size:13cqw;font-weight:900;line-height:1.2;letter-spacing:-.01em;
+  font-size:11cqw;line-height:1.15;
   text-align:center;white-space:pre-line;
   text-shadow:0 .9cqw 0 var(--bg-deep),0 1.8cqw 2.6cqw rgba(0,0,0,.35);
 }
-.lede{font-size:4.6cqw;line-height:1.7;text-align:center;color:rgba(255,255,255,.85)}
+.lede{font-size:4cqw;line-height:1.5;text-align:center;color:rgba(255,255,255,.85)}
 
 /* ───────── 題目面板（知識王式：大面板＋大按鈕） ───────── */
 .panel{
@@ -138,7 +143,7 @@ body{
   background:var(--panel);color:var(--ink);
   border-radius:6cqw;
   box-shadow:0 1.6cqw 0 var(--panel-shadow);
-  padding:10cqw 6.5cqw 8cqw;
+  padding:9cqw 6cqw 7cqw;
 }
 .q-badge{
   position:absolute;left:50%;top:0;
@@ -147,20 +152,20 @@ body{
   padding:1.3cqw 5.5cqw;border-radius:999px;
   background:var(--gold);color:var(--gold-ink);
   box-shadow:0 .9cqw 0 var(--gold-deep);
-  font-size:4.6cqw;font-weight:900;
+  font-size:4cqw;
 }
-.q-badge.big{font-size:6cqw;padding:1.8cqw 8cqw}
+.q-badge.big{font-size:5cqw;padding:1.6cqw 7cqw}
 .question{
-  font-size:6.6cqw;font-weight:900;line-height:1.55;
+  font-size:5.6cqw;line-height:1.4;
   text-align:center;text-wrap:balance;
 }
 .story-text{
-  font-size:5.3cqw;font-weight:600;line-height:1.85;
+  font-size:4.6cqw;line-height:1.55;
   text-wrap:pretty;
 }
 .story-body[data-choice="no"] .q-badge{background:var(--ink);color:#fff;box-shadow:0 .9cqw 0 #000}
 .ending{
-  font-size:7.4cqw;font-weight:900;line-height:1.55;
+  font-size:6.4cqw;line-height:1.4;
   text-align:center;white-space:pre-line;text-wrap:balance;
 }
 
@@ -169,7 +174,7 @@ body{
   appearance:none;-webkit-appearance:none;
   width:100%;min-height:17cqw;padding:0 6cqw;
   border:0;border-radius:5cqw;
-  font:inherit;font-size:6cqw;font-weight:900;letter-spacing:.02em;
+  font:inherit;font-size:5.4cqw;letter-spacing:.02em;
   cursor:pointer;touch-action:manipulation;
   box-shadow:0 1.4cqw 0 var(--btn-shadow);
   transition:transform .08s ease,box-shadow .08s ease,background .2s ease,color .2s ease,opacity .25s ease;
@@ -178,14 +183,14 @@ body{
 .btn:focus-visible{outline:.8cqw solid #fff;outline-offset:1cqw}
 .btn-gold{background:var(--gold);color:var(--gold-ink);--btn-shadow:var(--gold-deep)}
 .btn-white{background:#fff;color:var(--ink);--btn-shadow:var(--panel-shadow)}
-.btn-big{min-height:22cqw;font-size:8.4cqw;border-radius:7cqw}
+.btn-big{min-height:21cqw;font-size:7.2cqw;border-radius:7cqw}
 .btn-glass{
-  min-height:14cqw;font-size:4.8cqw;
+  min-height:14cqw;font-size:4.4cqw;
   background:rgba(255,255,255,.2);color:#fff;--btn-shadow:rgba(0,0,0,.28);
   -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
 }
 .answers{gap:4.5cqw}
-.answers .btn{min-height:19cqw;font-size:7cqw}
+.answers .btn{min-height:18cqw;font-size:6cqw}
 .answers.picked .btn{opacity:.4}
 .answers.picked .btn.is-picked{opacity:1;background:var(--gold);color:var(--gold-ink);--btn-shadow:var(--gold-deep)}
 @media (hover:hover){.btn-white:hover{background:#f1f3ff}}
@@ -240,10 +245,10 @@ body{
   align-items:center;min-height:11cqw;padding:0 5cqw;
   border:0;border-radius:999px;cursor:pointer;
   background:rgba(255,255,255,.94);color:var(--ink);
-  font:inherit;font-size:4.2cqw;font-weight:800;touch-action:manipulation;
+  font:inherit;font-size:3.8cqw;touch-action:manipulation;
 }
 .video-msg{
-  font-size:4.6cqw;line-height:1.7;
+  font-size:4cqw;line-height:1.5;
   background:rgba(8,10,36,.78);padding:5cqw 6cqw;border-radius:5cqw;
 }
 .play-btn:focus-visible,.unmute-btn:focus-visible{outline:.8cqw solid #fff;outline-offset:1cqw}
@@ -367,6 +372,7 @@ body{
    目前每一題前的影片都是同一支，之後想各題不同，把各題的 url 換掉就好。
    ════════════════════════════════════════════════ */
 const VIDEO = { url: 'https://www.youtube.com/shorts/mzCIC-BvVwU' };
+
 
 /* 每一題共有 3 個影片位置：
    video      → 題目出現前播放
@@ -563,6 +569,7 @@ function restart() {
 let player = null, playerReady = false, apiReady = false, apiFailed = false;
 let videoActive = false, currentVideo = null, lastState = -1, playedAt = 0;
 let pollTimer = null, guards = [];
+let resumes = 0;
 
 function getVideoId(input) {
   if (!input) return null;
@@ -599,6 +606,7 @@ window.onYouTubeIframeAPIReady = () => {
           const f = player.getIframe();
           f.setAttribute('tabindex', '-1');
           f.setAttribute('aria-hidden', 'true');
+          f.style.pointerEvents = 'none';
         } catch (e) {}
         if (videoActive) loadCurrent();
       },
@@ -633,6 +641,7 @@ function prepareVideo(cfg) {
   el.videoBar.style.width = '0%';
   setShield('none');
   setLoading(true);
+  resumes = 0;
   setVeil(true);
   if (!currentVideo.id) return showVideoProblem('找不到影片網址，請檢查 CONFIG 裡的 url。');
   if (apiFailed) return showVideoProblem('影片暫時無法載入，可以按下「略過影片」繼續。');
@@ -671,15 +680,18 @@ function onPlayerState(e) {
   if (e.data === 1) {                       // 播放中
     clearGuards();
     setLoading(false);
-    setVeil(false);                         // 開始播放才拿掉黑幕
     playedAt = Date.now();
     setShield(player.isMuted() ? 'unmute' : 'none');
+    setVeil(false);                         // 開始播放就拿掉黑幕，影片直接出現
     startPoll();
   } else if (e.data === 0) {                // 播放結束
     setVeil(true);
     finishVideo();
-  } else if (e.data === 2 || e.data === 5 || e.data === -1) {
-    setVeil(true);                          // 暫停、未開始：用黑幕蓋住 YouTube 自己畫的按鈕
+  } else if (e.data === 2) {                // 被暫停（不論什麼原因）→ 黑幕蓋住，並立刻接著播
+    setVeil(true);
+    if (resumes < 3) { resumes++; try { player.playVideo(); } catch (err) {} }
+  } else if (e.data === 5 || e.data === -1) {
+    setVeil(true);                          // 尚未開始：蓋住 YouTube 的大播放鍵
   }
 }
 function startPoll() {
@@ -730,10 +742,20 @@ $('#unmuteBtn').addEventListener('click', () => {
   setShield('none');
 });
 
+/* ---------- 預先載入字體：把遊戲用到的字一次告訴瀏覽器，換頁時就不會閃一下別的字體 ---------- */
+function preloadFont() {
+  if (!document.fonts || !document.fonts.load) return;
+  const strs = [CONFIG.title, CONFIG.subtitle, CONFIG.clearTitle, CONFIG.ending,
+    'Yes No Q0123456789 第 / 題 開始 略過影片 繼續 重新選擇 你選了 點一下開啟聲音'];
+  CONFIG.questions.forEach((q) => strs.push(q.q, q.yes.story, q.no.story));
+  document.fonts.load('400 1em "Huninn"', strs.join('')).catch(() => {});
+}
+
 /* ---------- 啟動 ---------- */
 $('#startTitle').textContent = CONFIG.title;
 $('#startLede').textContent = CONFIG.subtitle;
 buildTrip();
+preloadFont();
 loadYouTubeApi();
 show('start');
 })();
