@@ -203,7 +203,7 @@ body{
 /* 黑幕：只要影片不是「正在播放」就蓋住 YouTube，暫停鍵、播放鍵、結尾推薦都不會露出來 */
 .veil{position:absolute;inset:0;background:#000;pointer-events:none}
 .video-layer[data-veil="on"] .veil{opacity:1;transition:none}
-.video-layer[data-veil="off"] .veil{opacity:0;transition:opacity var(--veil-ms,250ms) ease}
+.video-layer[data-veil="off"] .veil{opacity:0;transition:opacity .25s ease}
 .scrim{
   position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(to bottom,rgba(8,10,36,.6) 0,transparent 24%,transparent 70%,rgba(8,10,36,.65) 100%);
@@ -367,12 +367,6 @@ body{
    目前每一題前的影片都是同一支，之後想各題不同，把各題的 url 換掉就好。
    ════════════════════════════════════════════════ */
 const VIDEO = { url: 'https://www.youtube.com/shorts/mzCIC-BvVwU' };
-
-/* 影片開頭「從黑畫面淡入」：先全黑停留 hold 毫秒，再花 fade 毫秒慢慢亮起來。
-   YouTube 在剛開始播放的頭幾秒有時會自己畫出暫停鍵等按鈕，這段時間用黑幕蓋住。
-   （聲音照常播放；想關掉這個效果，把兩個數字都改成 0） */
-const VEIL_HOLD = 900;
-const VEIL_FADE = 1200;
 
 /* 每一題共有 3 個影片位置：
    video      → 題目出現前播放
@@ -569,7 +563,6 @@ function restart() {
 let player = null, playerReady = false, apiReady = false, apiFailed = false;
 let videoActive = false, currentVideo = null, lastState = -1, playedAt = 0;
 let pollTimer = null, guards = [];
-let veilTimer = null, firstPlay = true, resumes = 0;
 
 function getVideoId(input) {
   if (!input) return null;
@@ -579,13 +572,6 @@ function getVideoId(input) {
 }
 const isPlaying = () => lastState === 1 || lastState === 3;
 const setVeil = (on) => { el.videoLayer.dataset.veil = on ? 'on' : 'off'; };
-function liftVeil(hold, fade) {
-  clearTimeout(veilTimer);
-  veilTimer = setTimeout(() => {
-    el.videoLayer.style.setProperty('--veil-ms', fade + 'ms');
-    setVeil(false);
-  }, hold);
-}
 const setLoading = (on) => { el.videoLayer.dataset.loading = on ? 'true' : 'false'; };
 const setShield = (mode) => { el.shield.dataset.mode = mode; };
 function showVideoProblem(msg) {
@@ -613,7 +599,6 @@ window.onYouTubeIframeAPIReady = () => {
           const f = player.getIframe();
           f.setAttribute('tabindex', '-1');
           f.setAttribute('aria-hidden', 'true');
-          f.style.pointerEvents = 'none';
         } catch (e) {}
         if (videoActive) loadCurrent();
       },
@@ -648,9 +633,6 @@ function prepareVideo(cfg) {
   el.videoBar.style.width = '0%';
   setShield('none');
   setLoading(true);
-  clearTimeout(veilTimer);
-  firstPlay = true;
-  resumes = 0;
   setVeil(true);
   if (!currentVideo.id) return showVideoProblem('找不到影片網址，請檢查 CONFIG 裡的 url。');
   if (apiFailed) return showVideoProblem('影片暫時無法載入，可以按下「略過影片」繼續。');
@@ -689,22 +671,15 @@ function onPlayerState(e) {
   if (e.data === 1) {                       // 播放中
     clearGuards();
     setLoading(false);
+    setVeil(false);                         // 開始播放才拿掉黑幕
     playedAt = Date.now();
     setShield(player.isMuted() ? 'unmute' : 'none');
-    if (firstPlay) { firstPlay = false; liftVeil(VEIL_HOLD, VEIL_FADE); }   // 開頭：黑畫面 → 慢慢淡入
-    else liftVeil(0, 250);
     startPoll();
   } else if (e.data === 0) {                // 播放結束
-    clearTimeout(veilTimer);
     setVeil(true);
     finishVideo();
-  } else if (e.data === 2) {                // 被暫停（不論什麼原因）→ 黑幕蓋住，並立刻接著播
-    clearTimeout(veilTimer);
-    setVeil(true);
-    if (resumes < 3) { resumes++; try { player.playVideo(); } catch (err) {} }
-  } else if (e.data === 5 || e.data === -1) {
-    clearTimeout(veilTimer);
-    setVeil(true);                          // 尚未開始：蓋住 YouTube 的大播放鍵
+  } else if (e.data === 2 || e.data === 5 || e.data === -1) {
+    setVeil(true);                          // 暫停、未開始：用黑幕蓋住 YouTube 自己畫的按鈕
   }
 }
 function startPoll() {
@@ -730,7 +705,6 @@ function finishVideo() {
   videoActive = false;
   stopPoll();
   clearGuards();
-  clearTimeout(veilTimer);
   const target = videoNext;
   show(target, () => {
     try { if (player && playerReady) player.pauseVideo(); } catch (e) {}   // 淡出結束後才停，聲音不會突然被切掉
